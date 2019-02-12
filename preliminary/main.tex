@@ -47,7 +47,7 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage[backend=bibtex, natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
-\addbibresource{example.bib} % The filename of the bibliography
+\addbibresource{example} % The filename of the bibliography
 
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 
@@ -156,9 +156,10 @@ headsepline, % Uncomment to get a line under the header
 %----------------------------------------------------------------------------------------
 %	LIST OF CONTENTS/FIGURES/TABLES PAGES
 %----------------------------------------------------------------------------------------
-
-\tableofcontents % Prints the main table of contents
-
+{
+	\hypersetup{linkcolor=black}	%changes colour of contents table
+	\tableofcontents % Prints the main table of contents
+}
 %\listoffigures % Prints the list of figures
 
 %\listoftables % Prints the list of tables
@@ -198,7 +199,6 @@ headsepline, % Uncomment to get a line under the header
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
-
 
 \printbibliography[heading=bibintoc]
 

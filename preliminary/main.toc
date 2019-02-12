@@ -1,9 +1,10 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
 \babel@toc {english}{}
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.3}% 
-\contentsline {chapter}{\numberline {2}Aims and Objectives}{3}{chapter.4}% 
-\contentsline {chapter}{\numberline {3}Methods}{5}{chapter.5}% 
-\contentsline {chapter}{\numberline {4}Project Plan}{7}{chapter.6}% 
-\contentsline {chapter}{\numberline {5}Progress to date}{9}{chapter.7}% 
-\contentsline {chapter}{\numberline {6}Planned Work}{11}{chapter.8}% 
-\contentsline {chapter}{\numberline {A}if appropriate}{13}{appendix.9}% 
+\contentsline {section}{\numberline {1.1}Aim}{1}{section.4}% 
+\contentsline {chapter}{\numberline {2}Background Research}{3}{chapter.5}% 
+\contentsline {chapter}{\numberline {3}Method}{5}{chapter.6}% 
+\contentsline {chapter}{\numberline {4}Project Plan}{7}{chapter.7}% 
+\contentsline {chapter}{\numberline {5}Progress to date}{9}{chapter.8}% 
+\contentsline {chapter}{\numberline {6}Planned Work}{11}{chapter.9}% 
+\contentsline {chapter}{\numberline {A}if appropriate}{13}{appendix.10}% 
