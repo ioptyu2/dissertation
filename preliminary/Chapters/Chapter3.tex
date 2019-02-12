@@ -4,8 +4,18 @@
 
 \label{Chapter3}
 
+\section{Method}
+The core part of the system will be deciding whether the account it is checking is a bot or not. It will use a form of machine learning to classify the account as either 'bot' or 'not bot'. Initially it would seem as if this was a binary classification issue, however it makes more sense to treat it as a regression problem. This makes it much easier to interpret the results for the user as a probability is easily understood and is a much more honest answer compared to just giving the user a 'yes' or 'no'.
+
+
 \section{System Requirements}
 In order to achieve the aims of the system, there are a few things the program will need to do.
+\begin{enumerate}
+	\item The system must be able to determine whether an account is a bot or not.
+	\item A connection using the Twitter API must be established in order to retrieve users' data.
+	\item Allow users to input a Twitter account.
+	\item Display the likelihood that an account is a bot or not.
+\end{enumerate}
 
 
 
