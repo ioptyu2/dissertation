@@ -7,11 +7,18 @@
 \contentsline {subsection}{\numberline {2.1.1}2016 US Elections}{3}{subsection.7}% 
 \contentsline {paragraph}{}{3}{section*.8}% 
 \contentsline {subsection}{\numberline {2.1.2}2018 US Mid-Term Election}{3}{subsection.9}% 
-\contentsline {section}{\numberline {2.2}Existing Systems}{3}{section.10}% 
-\contentsline {subsection}{\numberline {2.2.1}Tweetbotornot}{4}{subsection.11}% 
-\contentsline {chapter}{\numberline {3}System Design}{5}{chapter.12}% 
-\contentsline {section}{\numberline {3.1}Method}{5}{section.13}% 
-\contentsline {section}{\numberline {3.2}System Requirements}{5}{section.14}% 
-\contentsline {chapter}{\numberline {4}Planning}{7}{chapter.19}% 
-\contentsline {chapter}{\numberline {A}if appropriate}{9}{appendix.20}% 
-\contentsline {chapter}{Bibliography}{11}{appendix*.21}% 
+\contentsline {section}{\numberline {2.2}Twitter junk}{4}{section.10}% 
+\contentsline {section}{\numberline {2.3}Existing Systems}{4}{section.11}% 
+\contentsline {subsection}{\numberline {2.3.1}Tweetbotornot}{4}{subsection.12}% 
+\contentsline {subsection}{\numberline {2.3.2}DeBot}{4}{subsection.13}% 
+\contentsline {chapter}{\numberline {3}System Design}{5}{chapter.14}% 
+\contentsline {section}{\numberline {3.1}Method}{5}{section.15}% 
+\contentsline {section}{\numberline {3.2}System Requirements}{5}{section.16}% 
+\contentsline {section}{\numberline {3.3}Algorithm}{5}{section.21}% 
+\contentsline {subsection}{\numberline {3.3.1}Data}{5}{subsection.22}% 
+\contentsline {subsection}{\numberline {3.3.2}Twitter API}{6}{subsection.23}% 
+\contentsline {chapter}{\numberline {4}Planning}{7}{chapter.24}% 
+\contentsline {section}{\numberline {4.1}Gantt chart}{7}{section.25}% 
+\contentsline {section}{\numberline {4.2}Progress Logs}{7}{section.27}% 
+\contentsline {section}{\numberline {4.3}Version Control}{8}{section.28}% 
+\contentsline {chapter}{Bibliography}{9}{appendix*.30}% 

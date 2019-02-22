@@ -171,5 +171,101 @@
     \warn{\item Invalid format of field 'date' \item Invalid format of field
   'date'}
   \endentry
+
+  \entry{BBC001}{online}{}
+    \name{author}{1}{}{%
+      {{hash=B}{%
+         family={BBC},
+         familyi={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{B1}
+    \strng{fullhash}{B1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{US mid-terms: Twitter deletes anti-voting bots}
+    \verb{url}
+    \verb https://www.bbc.co.uk/news/technology-46080157
+    \endverb
+    \warn{\item Invalid format of field 'date' \item Invalid format of field
+  'date'}
+  \endentry
+
+  \entry{ETimes001}{online}{}
+    \name{author}{1}{}{%
+      {{hash=TTE}{%
+         family={Times},
+         familyi={T\bibinitperiod},
+         given={The\bibnamedelima Economic},
+         giveni={T\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{TTE1}
+    \strng{fullhash}{TTE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Thousands of Twitter bots active during 2018 US mid-term
+  elections}
+    \verb{url}
+    \verb https://economictimes.indiatimes.com/news/international/world-news/th
+    \verb ousands-of-twitter-bots-active-during-2018-us-mid-term-elections/arti
+    \verb cleshow/67850597.cms
+    \endverb
+    \warn{\item Invalid format of field 'date' \item Invalid format of field
+  'date'}
+  \endentry
+
+  \entry{IOWA001}{online}{}
+    \name{author}{2}{}{%
+      {{hash=FS}{%
+         family={Farooqi},
+         familyi={F\bibinitperiod},
+         given={Shehroze},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=SZ}{%
+         family={Shafiq},
+         familyi={S\bibinitperiod},
+         given={Zubair},
+         giveni={Z\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{FSSZ1}
+    \strng{fullhash}{FSSZ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Measurement and Early Detection of Third-Party Application
+  Abuse on Twitter}
+    \verb{url}
+    \verb http://homepage.divms.uiowa.edu/~sfarooqi/Files/Farooqi-AbusiveTwitte
+    \verb rApplications.pdf
+    \endverb
+    \warn{\item Invalid format of field 'date' \item Invalid format of field
+  'date'}
+  \endentry
+
+  \entry{Wired001}{online}{}
+    \name{author}{1}{}{%
+      {{hash=GA}{%
+         family={Greenberg},
+         familyi={G\bibinitperiod},
+         given={Andy},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{GA1}
+    \strng{fullhash}{GA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{TWITTER STILL CAN'T KEEP UP WITH ITS FLOOD OF JUNK ACCOUNTS,
+  STUDY FINDS}
+    \verb{url}
+    \verb https://www.wired.com/story/twitter-abusive-apps-machine-learning/?mb
+    \verb id=social_twitter&utm_brand=wired&utm_campaign=wired&utm_medium=socia
+    \verb l&utm_social-type=owned&utm_source=twitter
+    \endverb
+    \warn{\item Invalid format of field 'date' \item Invalid format of field
+  'date'}
+  \endentry
 \enddatalist
 \endinput
