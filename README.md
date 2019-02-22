@@ -1,4 +1,4 @@
 # Twitter bot detection
 
 
-write some stuff here
+A python program for detecting twitter bots.
