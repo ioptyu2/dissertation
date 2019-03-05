@@ -267,5 +267,28 @@
     \warn{\item Invalid format of field 'date' \item Invalid format of field
   'date'}
   \endentry
+
+  \entry{DataScience001}{online}{}
+    \name{author}{1}{}{%
+      {{hash=KW}{%
+         family={Koehrsen},
+         familyi={K\bibinitperiod},
+         given={Will},
+         giveni={W\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{KW1}
+    \strng{fullhash}{KW1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{An Implementation and Explanation of the Random Forest in
+  Python}
+    \verb{url}
+    \verb https://towardsdatascience.com/an-implementation-and-explanation-of-t
+    \verb he-random-forest-in-python-77bf308a9b76
+    \endverb
+    \warn{\item Invalid format of field 'date' \item Invalid format of field
+  'date'}
+  \endentry
 \enddatalist
 \endinput

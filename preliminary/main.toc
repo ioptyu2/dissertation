@@ -15,10 +15,11 @@
 \contentsline {section}{\numberline {3.1}Method}{5}{section.15}% 
 \contentsline {section}{\numberline {3.2}System Requirements}{5}{section.16}% 
 \contentsline {section}{\numberline {3.3}Algorithm}{5}{section.21}% 
-\contentsline {subsection}{\numberline {3.3.1}Data}{5}{subsection.22}% 
-\contentsline {subsection}{\numberline {3.3.2}Twitter API}{6}{subsection.23}% 
-\contentsline {chapter}{\numberline {4}Planning}{7}{chapter.24}% 
-\contentsline {section}{\numberline {4.1}Gantt chart}{7}{section.25}% 
-\contentsline {section}{\numberline {4.2}Progress Logs}{7}{section.27}% 
-\contentsline {section}{\numberline {4.3}Version Control}{8}{section.28}% 
-\contentsline {chapter}{Bibliography}{9}{appendix*.30}% 
+\contentsline {subsection}{\numberline {3.3.1}Random Forest}{5}{subsection.22}% 
+\contentsline {subsection}{\numberline {3.3.2}Data}{6}{subsection.23}% 
+\contentsline {subsection}{\numberline {3.3.3}Twitter API}{6}{subsection.24}% 
+\contentsline {chapter}{\numberline {4}Planning}{7}{chapter.25}% 
+\contentsline {section}{\numberline {4.1}Gantt chart}{7}{section.26}% 
+\contentsline {section}{\numberline {4.2}Progress Logs}{7}{section.28}% 
+\contentsline {section}{\numberline {4.3}Version Control}{8}{section.29}% 
+\contentsline {chapter}{Bibliography}{9}{appendix*.31}% 
