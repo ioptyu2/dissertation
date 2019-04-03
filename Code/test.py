@@ -5,15 +5,26 @@ from random import seed
 from random import randrange
 from math import sqrt
 import numpy as np
+import preprocessing
 
 iris = datasets.load_iris()
 
 X = iris.data
 Y = iris.target
 dataset = []
-for i in range(len(X)):
-    dataset.append(np.hstack((X[i],Y[i])))
+#for i in range(len(X)):
+#    dataset.append(np.hstack((X[i],Y[i])))
 
+#testing with twitter data
+df = preprocessing.import_data()
+bots = df[1].values[:1000,3:].astype(int)
+legit = df[2].values[:1000,3:].astype(int)
+
+#adding label, bots=1 legit=0
+bots = np.hstack((bots,np.ones((bots.shape[0],1))))
+legit = np.hstack((legit,np.zeros((legit.shape[0],1))))
+
+dataset = np.vstack((bots,legit))
 
 
 # Split a dataset into k folds
@@ -41,7 +52,7 @@ def accuracy_metric(actual, predicted):
 def evaluate_algorithm(dataset, algorithm, n_folds, *args):
 	folds = cross_validation_split(dataset, n_folds)
 	scores = list()
-	print(folds[0])
+	#print(folds[0])
 	for fold in folds:
 		train_set = list(folds)
 		#print("train",train_set[0])
@@ -173,6 +184,7 @@ def bagging_predict(trees, row):
 def random_forest(train, test, max_depth, min_size, sample_size, n_trees, n_features):
 	trees = list()
 	for i in range(n_trees):
+		print(i)
 		sample = subsample(train, sample_size)
 		tree = build_tree(sample, max_depth, min_size, n_features)
 		trees.append(tree)
@@ -186,8 +198,8 @@ seed(2)
 
 
 # evaluate algorithm
-n_folds = 5
-max_depth = 10
+n_folds = 2
+max_depth = 5
 min_size = 1
 sample_size = 1.0
 n_features = int(sqrt(len(dataset[0])-1))
