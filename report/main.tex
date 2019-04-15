@@ -69,7 +69,7 @@ headsepline, % Uncomment to get a line under the header
 %	THESIS INFORMATION
 %----------------------------------------------------------------------------------------
 
-\thesistitle{Preliminary Report} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
+\thesistitle{Detecting Twitter Bots Using Machine Learning} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
 \supervisor{Dr. Lahcen \textsc{Ouarbya}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
 \examiner{} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
 \degree{BSc Computer Science Degree} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
@@ -108,7 +108,7 @@ headsepline, % Uncomment to get a line under the header
 \vspace*{.06\textheight}
 \begin{figure}
 \centering
-\includegraphics[width=80mm]{Figures/logo1}
+\includegraphics{Figures/logo}
 %\decoRule
 \end{figure}
 
@@ -152,6 +152,48 @@ headsepline, % Uncomment to get a line under the header
 \end{titlepage}
 
 
+%----------------------------------------------------------------------------------------
+%	DECLARATION PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{declaration}
+	\addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
+	\noindent I, \authorname, declare that this thesis titled, \enquote{\ttitle} and the work presented in it are my own. I confirm that:
+	
+	\begin{itemize} 
+		\item Where I have consulted the published work of others, this is always clearly attributed.
+		\item Where I have quoted from the work of others, the source is always given. With the exception of such quotations, this thesis is entirely my own work.
+		\item I have acknowledged all main sources of help.
+	\end{itemize}
+	
+	\noindent Signed:\\
+	\rule[0.5em]{25em}{0.5pt} % This prints a line for the signature
+	
+	\noindent Date:\\
+	\rule[0.5em]{25em}{0.5pt} % This prints a line to write the date
+\end{declaration}
+
+\cleardoublepage
+
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{abstract}
+	%\addchaptertocentry{\abstractname} % Add the abstract to the table of contents
+	\paragraph{}
+	This project aims to classify Twitter accounts as either bots or human-made using machine learning along with a variety of parameters. This is achieved using core functionality of Python as well as popular libraries such as Numpy, Pandas and SKLearn. Some parts of the Twitter API was also integrated for retrieving data. 
+\end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	ACKNOWLEDGEMENTS
+%----------------------------------------------------------------------------------------
+
+\begin{acknowledgements}
+	\addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
+	The acknowledgments and people to thank go here i.e. your  supervisor\ldots
+\end{acknowledgements}
 
 %----------------------------------------------------------------------------------------
 %	LIST OF CONTENTS/FIGURES/TABLES PAGES
