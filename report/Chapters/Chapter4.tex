@@ -1,26 +1,58 @@
+%Chapter 4
 
-
-\chapter{Planning}
+\chapter{System Design}
 
 \label{Chapter4}
+This chapter is about the methodology behind the program and some of the features and requirements.
 
-In this section I will talk about some of the things I have done to make sure everything goes as planned and my time is used efficiently. 
+\section{Method}
+The core functionality of the system is the classification and prediction of said classes. Different machine learning algorithms are used to predict the bots. This task can be treated as either a regression or binary classification problem. In the end the system is a binary predictor therefore the latter makes more sense. 
 
-\section{Gantt chart}
-Gantt charts are a nice way to keep track of your time available over a whole project. It really helps understand the scope of things and to give a better estimate on how to split up your time into smaller chunks.
-\begin{figure}[!h]
-\includegraphics[width=150mm]{figures/gantt_chart}
-\caption{Gantt chart}
-\end{figure}
 
-Here you can see the gantt chart created for this project. It has a rough sketch of the bigger tasks, nothing too precise, as it is helpful enough this way to keep track of the weeks overall.
+\section{System Requirements}
+In order to achieve the aims of the system, there are a few things the program will need to do.
+\begin{enumerate}
+	\item The system must be able to determine whether an account is a bot or not.
+	\item Display the likelihood that an account is a bot or not.
+    \item The system should evaluate the results.
+    \item The system should compare results with the other classifiers.
+\end{enumerate}
 
-\section{Progress Logs}
-The weekly progress logs act as a weekly sprint. In them I write down what I did, what I wanted to do and what I will do by next week. This helps keep track of the more short term week-by-week goals. I also find the recaps at the end of the week to be quite helpful to remind myself of what I did and what I still need to do. 
+\section{Algorithm}
+There are several algorithms in the system running together. These classifiers can be used to compare results with each other to better evaluate them. The different algorithms are; random forest implemented from the ground up and using the sklearn library, as well as an artificial neural network. It's important to keep in mind the accuracy versus the performance of the system. Achieving good results will come due to finding a balance between the two. 
 
-\section{Version Control}
-Version control is an essential part of any project. I'm using GitHub, but there are many others out there that do the same job. It helps mainly because of the ability to go back to previous versions whenever needed, for example when something goes horribly wrong. 
-\begin{figure}[!h]
-	\includegraphics[width=140mm]{figures/github}
-	\caption{Github Repository}
-\end{figure}
+
+\section{Data}
+The data will have to be kept the same throughout for a fair comparison. As it would take an extended period of time to obtain all this data using the system, it's much easier if it uses data already gathered from the internet. 
+
+To start off with, the system will use only numerical data from Twitter accounts, such as number of followers and number of tweets. Using text like the actual content of tweets would be very complicated and most likely require a more complex system then the one designed. If the predictions aren't great then using more or different features can be considered. 
+
+\section{Language}
+The language being used to implement the system in it's entirety will be Python. The main reason for selecting this as the language is because of the libraries that can be utilised by it.
+
+\subsection{Sklearn}
+Sklearn is a python library designed specifically for machine learning. It has a huge range of supervised and unsupervised learning algorithms. 
+
+\subsection{Keras}
+Keras is a high-level neural networks API. It runs on top of tensorflow. It is the basis of the neural network designed for this system. It provides easy to create models that also perform very well and fast.
+
+\subsection{Numpy}
+Numpy is a multi-dimensional array package. It's what the system uses for most of its arrays and data manipulation. It allows the system to combine and split multi-dimensional arrays with ease. 
+
+\subsection{Matplotlib}
+Matplotlib is only used within the neural network for evaluation of the system. It makes it very simple by drawing plotted graphs of validation accuracy and loss values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

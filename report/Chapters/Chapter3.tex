@@ -1,30 +1,26 @@
 %Chapter 3
 
-\chapter{System Design}
+\chapter{Planning}
 
 \label{Chapter3}
-This chapter is about the methodology behind the program and some of the features and requirements.
 
-\section{Method}
-The core part of the system will be deciding whether the account it is checking is a bot or not. It will use a form of machine learning to classify the account as either 'bot' or 'not bot'. Initially it would seem as if this was a binary classification issue, however it makes more sense to treat it as a regression problem. This makes it much easier to interpret the results for the user as a probability is easily understood and is a much more honest answer compared to just giving the user a 'yes' or 'no' since we can never be too sure either way.
+This section contains all the things related to planning from all the way at the beginning until the very end.
 
+\section{Gantt chart}
+Gantt charts are a nice way to keep track of your time available over a whole project. It really helps understand the scope of things and to give a better estimate on how to split up your time into smaller chunks.
+\begin{figure}[!h]
+	\includegraphics[width=150mm]{figures/gantt_chart}
+	\caption{Gantt chart}
+\end{figure}
 
-\section{System Requirements}
-In order to achieve the aims of the system, there are a few things the program will need to do.
-\begin{enumerate}
-	\item Allow users to input a Twitter account.
-	\item A connection using the Twitter API must be established in order to retrieve users' data.
-	\item The system must be able to determine whether an account is a bot or not.
-	\item Display the likelihood that an account is a bot or not.
-\end{enumerate}
+Here you can see the gantt chart created for this project. It has a rough sketch of the bigger tasks, nothing too precise, as it is helpful enough this way to keep track of the weeks overall.
 
-\section{Algorithm}
-The algorithm for the system will consist of a supervised machine learning algorithm called random forest. This works by creating a multitude of decision trees and outputting the mean prediction of these trees. However, depending on how things go during development, it might make more sense to use a deep learning neural network instead for the regression. 
+\section{Progress Logs}
+The weekly progress logs act as a weekly sprint. In them I write down what I did, what I wanted to do and what I will do by next week. This helps keep track of the more short term week-by-week goals. I also find the recaps at the end of the week to be quite helpful to remind myself of what I did and what I still need to do. 
 
-
-\subsection{Data}
-Regardless of which algorithm I end up finalising with, I will need data for training. This is important since everything will be based on it. This data needs to also be correctly labelled and will most likely need to be pre-processed somewhat before being fed to my algorithm. It will then be used to train the system.
-
-\subsection{Twitter API}
-As the user will be able to enter a Twitter account name themselves, the program will need to have Twitter REST API functionality. This is to access the relevant accounts information such as tweets and account details. There is a limited number of requests allowed within a 15 minute window therefore I need to make sure to keep the API requests to a bare minimum. 
-
+\section{Version Control}
+Version control is an essential part of any project. I'm using GitHub, but there are many others out there that do the same job. It helps mainly because of the ability to go back to previous versions whenever needed, for example when something goes horribly wrong. 
+\begin{figure}[!h]
+	\includegraphics[width=140mm]{figures/github}
+	\caption{Github Repository}
+\end{figure}

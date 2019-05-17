@@ -58,6 +58,26 @@ To give a visual representation of a decision tree it would look something like 
 \\
 Here you can see that at each node there is a condition being made. This is the 'best' feature that is decided based on the earlier mentioned gini impurity being minimised. Then based on the value of these features for a given datapoint, the algorithm will traverse down a branch of the tree all the way to a root node. This then gives us our prediction for that one decision tree within the forest. 
 
+\section{Deep Learning(Neural Networks)}
+Deep learning or more specifically artificial neural networks are a relatively new form of machine learning that is more of a framework than an actual algorithm. ANN's aren't really a specific algorithm, more of a general decision making model. They do not need any sort of rules fed into them or being told what to do. Just some data and it begins training immediately. To understand the basics of ANN's we have to look at what they are made of. An ANN is made up of a multitude of layers. In these layers there are a whole bunch of perceptrons. 
+\begin{figure}[!h]
+\centering
+\includegraphics[width=100mm]{figures/perceptron}
+\caption{A single perceptron}
+\end{figure}
+
+The inputs are summed up with some weights as their coefficients and then compared to a threshold. If greater than said threshold then the output is 1 else it's 0. This rule can be written mathematically such as: 
+
+$$
+output = \begin{cases}
+0 & \text{ if $\sum_{j}w_{j}x_{j} \leq$ threshold} \\
+1 & \text{ if $\sum_{j}w_{j}x_{j}$ > threshold}
+\end{cases}
+$$
+
+Once you start training your model, the weights $w_{j}$ start to change to match the labels on the training data. As the layers of perceptrons goes on, the more complicated these values are in theory. They aren't just simple decisions any more, but instead represent the decisions made based on all the previous layers too. 
+
+
 
 \section{Existing Systems}
 There are a handful of algorithms or programs that have been designed to detect these bots. Most of them tend to use a machine learning algorithm as a way to classify accounts and tell them apart from each other, while others have attempted to use deep neural network architectures such as long short-term memory(LSTM).  

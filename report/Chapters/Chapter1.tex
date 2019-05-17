@@ -5,18 +5,34 @@
 \label{Chapter1} % For referencing the chapter elsewhere, use \ref{Chapter1} 
 
 Social media has become an integral part of our lives in the past years as we spend more time online than ever before. Roughly 30\% of our online time is spent on social media interactions, Twitter being one of them \cite{globalwebindex}.
-Twitter is arguably the largest source of news on the internet. This is due to the nature of information spreading on the platform through tweets and retweets. At this point, because of the scale, it is impossible to monitor it all to make sure everything is accurate and that there is no false information being spread. 
+Twitter is arguably the largest source of news on the internet. This is due to the nature of information spreading on the platform through tweets and retweets. At this point, because of the scale, it is impossible to monitor it all to make sure everything is accurate and that there is no false information being spread. Due to it being impossible to be fully managed through human monitoring, a network of detection systems would be required.
 
 \section{Aim}
-The aim of this project is to create a program with an underlying algorithm that will attempt to figure out whether a Twitter account is under the control of a human or is purely being controlled by a script that someone wrote. The issue doesn't come from there being accounts not directly used by people or 'bots'. There are plenty of examples of public bot accounts for things such as weather or news. Instead the issues come with the ones that claim to be real individuals when they in fact are not. With the use of a program such as this, it can be possible to identify these bots by comparing their parameters like tweet content and see if they match patterns of other real people or not.
-\newline
+The aim of this project is to create a program with an underlying algorithm that will attempt to classify a Twitter account as being under the control of a human or purely being run by some form of a script that someone wrote. There might be a misconception that all bot accounts are bad, which is untrue. There are plenty of examples of public bot accounts for things such as weather or news. Instead, the issues come with the ones that claim to be real individuals when they in fact are not. With the use of a program such as this, it is be possible to identify these bots by comparing their features like number of followers and number of accounts being followed and see if they match patterns of other real people or not.
+
+
 Ideally the program shouldn't misjudge too often and should be a reliable way to identify false accounts from real ones. This would be done through a supervised machine learning algorithm which would be fed with as much data of previously labelled accounts as possible.
 
+
+It's also important that the system uses features that give the best possible accuracy. Due to this there will be a lot of trial and error involved with trying to find the best possible combination of features and things such as number of trees to use or maximum depth of a given tree. 
+
+\section{Motivation}
+The idea for the project came after I read an article on the effects of social media on politics and how it can be influenced. I found it very intriguing and this was shortly after I had begun to learn about machine learning and deep learning in my third year of university. That was when I knew that this would make for an interesting project.
+
+\section{Results}
+By the end of the project the system achieved results that were expected. All classifiers were within 80\% to 95\% accuracy overall.
+
 \section{Overview of report}
-The rest of the report is structured as follows;
+The rest of this report is structured as follows;
 \newline
 Chapter 2 is about background research. It displays some of the areas in which issues arise along with some of the solutions or systems that others have come up with. 
 \newline
-Chapter 3 contains the system design. This details the method, system requirements and data used during the project. Diagrams are used to display some of these methods. 
+Chapter 3 contains the planning for the project. It describes the processes taken before beginning development to ensure everything would go as planned. 
 \newline
-Chapter 4 contains the planning for the project. It describes the processes taken before beginning development to ensure everything would go as planned. 
+Chapter 4 contains the system design. This details the method, system requirements, data and languages used in the project.
+\newline
+Chapter 5 contains the implementation of the system with some main functions used in the programs. Each subsection in this chapter details a separate part of the implementation. All the code in there is briefly described. Testing is also found in this chapter.
+\newline
+Chapter 6 details the results from the systems and how these can be interpreted. 
+\newline
+Chapter 7 discusses the overall finding in this report. It also shows the possibilities of future work added on and where this project could go.

@@ -24,7 +24,7 @@
 
 \documentclass[
 11pt, % The default document font size, options: 10pt, 11pt, 12pt
-%oneside, % Two side (alternating margins) for binding by default, uncomment to switch to one side
+oneside, % Two side (alternating margins) for binding by default, uncomment to switch to one side
 english, % ngerman for German
 singlespacing, % Single line spacing, alternatives: onehalfspacing or doublespacing
 %draft, % Uncomment to enable draft mode (no pictures, no links, overfull hboxes indicated)
@@ -41,6 +41,32 @@ headsepline, % Uncomment to get a line under the header
 \usepackage[utf8]{inputenc} % Required for inputting international characters
 \usepackage[T1]{fontenc} % Output font encoding for international characters
 
+\usepackage{listings} % used for embedding code
+\usepackage{color}
+
+\usepackage{pdfpages}
+
+\usepackage{array}
+
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
+
 \usepackage{mathpazo} % Use the Palatino font by default
 
 %\usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
@@ -48,6 +74,8 @@ headsepline, % Uncomment to get a line under the header
 \usepackage[backend=bibtex, natbib=true, sorting=none]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
 \addbibresource{example.bib} % The filename of the bibliography
+
+\usepackage{amsmath}
 
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 
@@ -166,11 +194,11 @@ headsepline, % Uncomment to get a line under the header
 		\item I have acknowledged all main sources of help.
 	\end{itemize}
 	
-	\noindent Signed:\\
-	\rule[0.5em]{25em}{0.5pt} % This prints a line for the signature
+%	\noindent Signed:\\
+%	\rule[0.5em]{25em}{0.5pt} % This prints a line for the signature
 	
-	\noindent Date:\\
-	\rule[0.5em]{25em}{0.5pt} % This prints a line to write the date
+%	\noindent Date:\\
+%	\rule[0.5em]{25em}{0.5pt} % This prints a line to write the date
 \end{declaration}
 
 \cleardoublepage
@@ -183,7 +211,7 @@ headsepline, % Uncomment to get a line under the header
 \begin{abstract}
 	%\addchaptertocentry{\abstractname} % Add the abstract to the table of contents
 	\paragraph{}
-	This project aims to classify Twitter accounts as either bots or human-made using machine learning along with a variety of parameters. This is achieved using core functionality of Python as well as popular libraries such as Numpy, Pandas and SKLearn. Some parts of the Twitter API was also integrated for retrieving data. 
+	This project aims to classify Twitter accounts as either bots or human-made using machine learning along with a variety of parameters. This is achieved using core functionality of Python as well as popular libraries such as Numpy, Pandas and SKLearn. Some portion of Deep Learning was also explored briefly. 
 \end{abstract}
 
 %----------------------------------------------------------------------------------------
@@ -192,7 +220,8 @@ headsepline, % Uncomment to get a line under the header
 
 \begin{acknowledgements}
 	\addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
-	The acknowledgments and people to thank go here i.e. your  supervisor\ldots
+	I'd like to thank my supervisor Lahcen for helping me out as much as he did. Calling me, answering me and everything else even during holidays. Until the very last day he was still helping me out.
+    I am grateful that he helped out as much as he did regardless of how busy he was.
 \end{acknowledgements}
 
 %----------------------------------------------------------------------------------------
@@ -242,8 +271,23 @@ headsepline, % Uncomment to get a line under the header
 \include{Chapters/Chapter2} 
 \include{Chapters/Chapter3}
 \include{Chapters/Chapter4} 
-%\include{Chapters/Chapter5}
-%\include{Chapters/Chapter6}
+\include{Chapters/Chapter5}
+\include{Chapters/Chapter6}
+\include{Chapters/Chapter7}
+
+
+\nocite{RF002}
+\nocite{RF003}
+\nocite{RF004}
+\nocite{DATA001}
+\nocite{PYTHON001}
+\nocite{NN001}
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+\printbibliography[heading=bibintoc]
+
 
 
 %----------------------------------------------------------------------------------------
@@ -255,13 +299,13 @@ headsepline, % Uncomment to get a line under the header
 % Include the appendices of the thesis as separate files from the Appendices folder
 % Uncomment the lines as you write the Appendices
 
-%\include{Appendices/AppendixA}
+\include{Appendices/AppendixA}
+\include{Appendices/AppendixB}
+\include{Appendices/AppendixC}
 
 
-%----------------------------------------------------------------------------------------
-%	BIBLIOGRAPHY
-%----------------------------------------------------------------------------------------
-\printbibliography[heading=bibintoc]
+
+
 
 
 

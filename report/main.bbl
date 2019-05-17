@@ -290,5 +290,134 @@
     \warn{\item Invalid format of field 'date' \item Invalid format of field
   'date'}
   \endentry
+
+  \entry{RF002}{online}{}
+    \name{author}{1}{}{%
+      {{hash=BJ}{%
+         family={Brownlee},
+         familyi={B\bibinitperiod},
+         given={Jason},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BJ1}
+    \strng{fullhash}{BJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Machine Learning Mastery}
+    \verb{url}
+    \verb https://machinelearningmastery.com/implement-random-forest-scratch-py
+    \verb thon/
+    \endverb
+    \warn{\item Invalid format of field 'date' \item Invalid format of field
+  'date'}
+  \endentry
+
+  \entry{RF003}{online}{}
+    \field{labeltitlesource}{title}
+    \field{title}{What are Random Forests}
+    \verb{url}
+    \verb https://www.python-course.eu/Random_Forests.php
+    \endverb
+    \warn{\item Invalid format of field 'date' \item Invalid format of field
+  'date'}
+  \endentry
+
+  \entry{RF004}{online}{}
+    \name{author}{1}{}{%
+      {{hash=wM}{%
+         family={wb},
+         familyi={w\bibinitperiod},
+         given={Matthew},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{wM1}
+    \strng{fullhash}{wM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Random Forests}
+    \verb{url}
+    \verb http://pages.cs.wisc.edu/~matthewb/pages/notes/pdf/ensembles/RandomFo
+    \verb rests.pdf
+    \endverb
+    \warn{\item Invalid format of field 'date' \item Invalid format of field
+  'date'}
+  \endentry
+
+  \entry{DATA001}{online}{}
+    \name{author}{2}{}{%
+      {{hash=LBDEK}{%
+         family={Lee},
+         familyi={L\bibinitperiod},
+         suffix={Kyumin},
+         suffixi={K\bibinitperiod},
+         given={Brian David\bibnamedelima Eoff},
+         giveni={B\bibinitperiod\bibinitdelim D\bibinitperiod\bibinitdelim
+  E\bibinitperiod},
+      }}%
+      {{hash=CJ}{%
+         family={Caverlee},
+         familyi={C\bibinitperiod},
+         given={James},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LKBDECJ1}
+    \strng{fullhash}{LKBDECJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Seven Months with the Devils: A Long-Term Study of Content
+  Polluters on Twitter.}
+    \verb{url}
+    \verb https://botometer.iuni.iu.edu/bot-repository/datasets.html
+    \endverb
+    \warn{\item Invalid format of field 'date' \item Invalid format of field
+  'date'}
+  \endentry
+
+  \entry{PYTHON001}{online}{}
+    \name{author}{1}{}{%
+      {{hash=BJ}{%
+         family={Brownlee},
+         familyi={B\bibinitperiod},
+         given={Jason},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BJ1}
+    \strng{fullhash}{BJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{A Gentle Introduction to Scikit-Learn: A Python Machine
+  Learning Library}
+    \verb{url}
+    \verb https://machinelearningmastery.com/a-gentle-introduction-to-scikit-le
+    \verb arn-a-python-machine-learning-library/
+    \endverb
+    \warn{\item Invalid format of field 'date' \item Invalid format of field
+  'date'}
+  \endentry
+
+  \entry{NN001}{online}{}
+    \name{author}{1}{}{%
+      {{hash=NM}{%
+         family={Nielsen},
+         familyi={N\bibinitperiod},
+         given={Michael},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{NM1}
+    \strng{fullhash}{NM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{title}{Using neural nets to recognize handwritten digits}
+    \verb{url}
+    \verb http://neuralnetworksanddeeplearning.com/chap1.html
+    \endverb
+    \warn{\item Invalid format of field 'date' \item Invalid format of field
+  'date'}
+  \endentry
 \enddatalist
 \endinput

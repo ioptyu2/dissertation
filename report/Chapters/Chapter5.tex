@@ -1,6 +1,382 @@
 
 
-\chapter{Progress to date}
+\chapter{Implementation}
 
 \label{Chapter5}
+
+This chapter is about the implementation of the system. This will include functions of the code along with an explanation on what they do. For the results from all the implementations, please refer to \textit{Chapter 6}.
+
+\section{Preprocessing}
+
+The first thing that needed to be done was to get the data and clean it up so it's ready to be fed to the algorithm. The \textit{import\_data} function is used to process all the data from various types of text files and convert them into separate variables to then be parsed on for further cleaning. 
+\begin{center} 
+Code 5.1: Import data function
+\end{center}
+\begin{lstlisting}
+def import_data():
+
+    varol_users = np.loadtxt("Z:\ioptyu2\Desktop\gitDissertation\local\Data\\varol_2017.dat")
+
+
+    col_name = ["UserID","CreatedAt","CollectedAt","Followings","Followers","Tweets","NameLength","BioLength"]
+    bot_users = pd.read_csv("Z:/ioptyu2/Desktop/gitDissertation/local/Data/social_honeypot_icwsm_2011/content_polluters.txt",
+                                     sep="\t",
+                                     names = col_name)
+
+
+    legit_users = pd.read_csv("Z:/ioptyu2/Desktop/gitDissertation/local/Data/social_honeypot_icwsm_2011/legitimate_users.txt",
+                                      sep="\t",
+                                      names = col_name)
+    
+    return [varol_users,bot_users,legit_users,col_name]
+\end{lstlisting}
+
+Once the function is called in the appropriate place, the data is then sliced from the original size to fit the requirements of the algorithm. In the example below we only want the first 1000 entries. We also don't need the first 4 columns, so those are also being sliced. 
+\begin{center} 
+Code 5.2: Cleaning/adding labels
+\end{center}
+\begin{lstlisting}
+#cleaning up data(picking out useful rows)
+df = preprocessing.import_data()
+bots = df[1].values[:1000,3:].astype(int)
+legit = df[2].values[:1000,3:].astype(int)
+
+
+#adding label, bots=1 legit=0
+bots = np.hstack((bots,np.ones((bots.shape[0],1))))
+legit = np.hstack((legit,np.zeros((legit.shape[0],1))))
+
+dataset = np.vstack((bots,legit))
+\end{lstlisting}
+
+\section{Random Forest implementation}
+This is the main machine learning algorithm implemented for the classification. It's divided into several main functions. 
+\\
+\\
+The \textit{random\_forest} function, as shown in Code 5.1, is main predictor that provides the predictions for the algorithm using all the other functions. In here the data is split up into samples as well as building the trees and using them for predictions. 
+\begin{center} 
+Code 5.3: Random Forest main function
+\end{center}
+\begin{lstlisting}
+def random_forest(train, test, max_depth, min_size, sample_size, n_trees, n_features):
+    trees = list()
+    for i in range(n_trees):
+        print(i)
+        sample = subsample(train, sample_size)
+        tree = build_tree(sample, max_depth, min_size, n_features)
+        trees.append(tree)
+    predictions = [bagging_predict(trees, row) for row in test]
+    return predictions
+\end{lstlisting}
+
+The \textit{subsample} function splits the dataset into a specific amount of smaller sets based on the ratio given as the parameter. These smaller sets are appended to a list which is then returned out of the function. 
+\begin{center} 
+Code 5.4: Function for splitting the dataset
+\end{center}
+\begin{lstlisting}
+def subsample(dataset, ratio):
+    sample = list()
+    n_sample = round(len(dataset) * ratio)
+    while len(sample) < n_sample:
+        index = randrange(len(dataset))
+        sample.append(dataset[index])
+    return sample
+\end{lstlisting}
+
+The \textit{build\_tree} function finds the best split for a given dataset and then splits the data into a binary tree then returns the root node.
+\begin{center} 
+Code 5.5: Function for building a decision tree
+\end{center}
+\begin{lstlisting}
+def build_tree(train, max_depth, min_size, n_features):
+    root = best_split(train, n_features)
+    split(root, max_depth, min_size, n_features, 1)
+    return root
+\end{lstlisting}
+
+The \textit{split} function is responsible for the splitting of the nodes to create the trees. As long as there are child nodes of the current node remaining and the maximum depth hasn't been reached yet, we recursively keep going through the function.
+\begin{center} 
+Code 5.6: Split a given node into its children
+\end{center}
+\begin{lstlisting}
+def split(node, max_depth, min_size, n_features, depth):
+    left, right = node['groups']
+    del(node['groups'])
+    #check for no splits
+    if not left or not right:
+        node['left'] = node['right'] = terminal(left + right)
+        return
+    #check if max depth
+    if depth >= max_depth:
+        node['left'], node['right'] = terminal(left), terminal(right)
+        return
+    #go down left child
+    if len(left) <= min_size:
+        node['left'] = terminal(left)
+    else:
+        node['left'] = best_split(left, n_features)
+        split(node['left'], max_depth, min_size, n_features, depth + 1)
+    #go down right child
+    if len(right) <= min_size:
+        node['right'] = terminal(right)
+    else:
+        node['right'] = best_split(right, n_features)
+        split(node['right'], max_depth, min_size, n_features, depth + 1)
+\end{lstlisting}
+
+The \textit{terminal} function is a small section used in the \textit{split} function. It is used to create a terminal or final node. 
+\begin{center} 
+Code 5.7: Create a terminal node
+\end{center}
+\begin{lstlisting}
+def terminal(group):
+    outcomes = [row[-1] for row in group]
+    return max(set(outcomes), key=outcomes.count)
+\end{lstlisting}
+
+The \textit{best\_split} function helps find the best value to split the data at, by calculating the various values of the gini index. It finds the value at every split possible and then keeps the one with the lowest final value and saves that as the index and value. 
+\begin{center} 
+Code 5.8: Find the best split using gini index
+\end{center}
+\begin{lstlisting}
+def best_split(dataset, n_features):
+    class_values = list(set(row[-1] for row in dataset))
+    b_index, b_value, b_score, b_groups = 999,999,999,None
+    features = list()
+    while len(features) < n_features:
+        index = randrange(len(dataset[0])-1)
+        if index not in features:
+            features.append(index)
+    for index in features:
+        for row in dataset:
+            groups = test_split(index, row[index], dataset)
+            gini = get_gini(groups, class_values)
+            if gini < b_score:
+                b_index, b_value, b_score, b_groups = index, row[index], gini, groups
+    return {'index':b_index, 'value':b_value, 'groups':b_groups}
+\end{lstlisting}
+
+The \textit{test\_split} function is where the final splitting happens. The parameters tell the function which feature it should be focusing on and what value to split the dataset at. It splits the data into the two groups and returns them.
+\begin{center} 
+Code 5.9: Split the data by a value
+\end{center}
+\begin{lstlisting}
+def test_split(index, value, dataset):
+    left, right = list(), list()
+    for row in dataset:
+        if row[index] < value:
+            left.append(row)
+        else:
+            right.append(row)
+    return left,right
+\end{lstlisting}
+
+The \textit{get\_gini} function returns the gini index of the given group. This is done using the equation given by the gini index which can also be seen in \textit{Chapter 2.3}.
+\begin{center} 
+Code 5.10: Calculate the gini index for a split
+\end{center}
+\begin{lstlisting}
+def get_gini(groups, classes):
+    instances = float(sum([len(group) for group in groups]))
+    gini= 0.0
+    for group in groups:
+        size = float(len(group))
+        if size == 0:
+            continue
+        score = 0.0
+        for class_val in classes:
+            p = [row[-1] for row in group].count(class_val) / size
+            score += p*p
+        gini += (1.0 - score) * (size / instances)
+    return gini
+\end{lstlisting}
+
+The \textit{bagging\_predict} function is what provides the predicting for the algorithm. It uses the \textit{predict} function to predict the class of a given entry for each tree that we have. It then returns the class that there is more of outputted. 
+\begin{center} 
+Code 5.11: Make a list of predictions
+\end{center}
+\begin{lstlisting}
+def bagging_predict(trees, row):
+    predictions = [predict(tree, row) for tree in trees]
+    return max(set(predictions), key=predictions.count)
+\end{lstlisting}
+
+The \textit{evaluate} function is used to determine how well the algorithm is doing. It uses cross validation to essentially test it out. This is done by splitting the dataset up into training and testing sets. The training sets are used to optimise the algorithm, while the testing set is used to see how well it's doing. It returns how much of the test set it correctly predicts and returns that as the score.
+\begin{center} 
+Code 5.12: Evaluate algorithm
+\end{center}
+\begin{lstlisting}
+def evaluate(dataset, algorithm, folds, *args):
+    folds = cv(dataset,folds)
+    scores = list()
+    for fold in folds:
+        train_set = list(folds)
+        train_set = sum(train_set, [])
+        test_set = list()
+        for row in fold:
+            row_copy = list(row)
+            test_set.append(row_copy)
+            row_copy[-1] = None
+        predicted = algorithm(train_set, test_set, *args)
+        actual = [row[-1] for row in fold]
+        accuracy = accuracy_calc(actual, predicted)
+        scores.append(accuracy)
+    return scores
+\end{lstlisting}
+
+The \textit{cv} function is what completes the \textit{evaluate} function through the use of cross validation. This is done by splitting the dataset into folds and then returning it ready to be used for training and testing.
+\begin{center} 
+Code 5.13:Function for cross validation
+\end{center}
+\begin{lstlisting}
+def cv(dataset,folds):
+    dataset_split = list()
+    dataset_copy = list(dataset)
+    fold_size = int(len(dataset)/folds)
+    for i in range(folds):
+        fold = list()
+        while len(fold) < fold_size:
+            index = randrange(len(dataset_copy))
+            fold.append(dataset_copy.pop(index))
+        dataset_split.append(fold)
+    return dataset_split
+\end{lstlisting}
+
+The \textit{accuracy\_calc} function calculates the accuracy of the algorithm by comparing the actual class with the predicted ones and seeing how many of them match. It returns the accuracy as a percentage. 
+\begin{center} 
+Code 5.14: Calculating accuracy
+\end{center}
+\begin{lstlisting}
+def accuracy_calc(actual, predicted):
+    acc = 0.0
+    for i in range(len(actual)):
+        if actual[i] == predicted[i]:
+            acc += 1.0
+    return acc / len(actual) * 100.0
+\end{lstlisting}
+
+The \textit{predict} function is used to return the actual prediction for a given row. The node is the current tree being used to predict and the row is the entry that we are trying to get a prediction for. It recursively makes its way down the tree and arrives at one of the end nodes where it returns the value in that node. To read more about how the predictions as well as the trees are formed, refer to \textit{Chapter 2.3}
+\begin{center} 
+Code 5.15: Make a prediction
+\end{center}
+\begin{lstlisting}
+def predict(node, row):
+    if row[node['index']] < node['value']:
+        if isinstance(node['left'], dict):
+            return predict(node['left'], row)
+        else:
+            return node['left']
+    else:
+        if isinstance(node['right'], dict):
+            return predict(node['right'], row)
+        else:
+            return node['right']
+\end{lstlisting}
+
+\section{Sklearn implementation}
+Here is the implementation of random forest using the Sklearn library. It's comprised of 3 main functions.
+\\
+\\
+The \textit{random\_forest} function uses Sklearn to create and fit a random forest algorithm to the data provided. Once the data is fitted, the predictions using the \textit{predict} function are stored and returned.
+\begin{center} 
+Code 5.16: Main random forest function
+\end{center}
+\begin{lstlisting}
+def random_forest(n_trees, max_depth, n_features):
+    rf = RandomForestRegressor(n_estimators = n_trees, max_depth = max_depth, max_features = n_features, bootstrap = True)
+    rf.fit(X_train, Y_train)
+    predictions = rf.predict(X_test)
+    save_tree(rf)
+    return predictions
+\end{lstlisting}
+
+The \textit{save\_tree} function is used to save a given decision tree as a png with all the values and features included. Examples of this can be seen in the \textit{results} section of the report.
+\begin{center} 
+Code 5.17: Saving graph
+\end{center}
+\begin{lstlisting}
+def save_tree(rf):
+    tree = rf.estimators_[1]
+    export_graphviz(tree, out_file = 'tree.dot', feature_names = feature_list, rounded = True, precision = 1)
+    (graph, ) = pydot.graph_from_dot_file('tree.dot')
+    graph.write_png('tree.png')
+    return
+\end{lstlisting}
+
+The \textit{accuracy} function is used to show the accuracy of the predictions. Once calculated it prints the final percentage.
+\begin{center} 
+Code 5.18: Getting prediction accuracy
+\end{center}
+\begin{lstlisting}
+def accuracy(predictions):
+    for i in range(len(predictions)):
+        if predictions[i] < 0.5:
+            predictions[i] = 0.0
+        else:
+            predictions[i] = 1.0
+    accuracy = 0.0
+    for i in range(len(predictions)):
+        if predictions[i] == Y_test[i]:
+            accuracy += 1.0
+    accuracy = accuracy / len(predictions) * 100
+    print("Accuracy: ",accuracy, "%")
+    return
+\end{lstlisting}
+
+\section{Artificial Neural Network(ANN)}
+The following consists of the main parts of the ANN that was built for binary classification.
+\\
+\\
+This code snippet is responsible for creating the model and its layers. They all have an output dimension given along with what activation functio is being used. The final layer is what gives us our predicted labels using a sigmoid function. 
+The loss function used to optimise the model is binary cross entropy.
+\begin{center} 
+Code 5.19: Create/compile model
+\end{center}
+\begin{lstlisting}
+model = models.Sequential()
+model.add(layers.Dense(64, activation = "relu"))
+model.add(layers.Dense(32, activation = 'relu'))
+model.add(layers.Dense(2, activation = 'sigmoid'))
+
+
+model.compile(optimizer = 'adam',
+              loss = 'binary_crossentropy',
+              metrics = ['accuracy'])
+\end{lstlisting}
+
+Once the model was created, it was time to fit the data to it. In \textit{5.20} you can see the model being fit to the training data along with the hyper-parameters being provided in the form of epochs and batch size. These two can be changed to try and get different results. The model is then validated using the validation data and the results are stored in the variable \textit{history}.
+\begin{center}
+Code 5.20: Fit data to model
+\end{center}
+\begin{lstlisting}
+epochs = 1000
+batch_size = 16
+history = model.fit(x_train,
+                    y_train,
+                    epochs = epochs,
+                    batch_size = batch_size,
+                    validation_data = (x_val, y_val))
+\end{lstlisting}
+
+
+
+\section{Testing}
+As this isn't a system with a user interface or such, testing goes a little differently. For the base random forest implementation, cross validation was used for testing. In the sklearn algorithm and the neural network, a validation set was used to keep track of how the training of the model went. 
+
+\subsection{Cross Validation}
+Cross validation works by splitting up the training data we have into n parts, based on the selected number of folds. The data is then split into that many equal pieces. One part is stored as validation and the rest is used for training. Once the training is complete, the validation dataset can be used to check how well the model predicts the classes. This is repeated several times until each separate chunk of data has been used as validation. Then looking at the several accuracies from the iterations of training and predicting, the system averages it out and that is the total accuracy of the model. 
+
+This is especially useful when there isn't much data available, since it is essentially turning a dataset into many smaller ones that have merely one portion of it missing. For the implementation of cross validation refer to \textit{figure 5.13}
+
+\subsection{Validation set}
+For the other two models(sklearn \& NN) all that was used to test it was a single validation set. This basically does the same thing as one iteration of cross validation. It stores one part of the dataset to test the model one it is done training. 
+
+
+
+
+
+
+
+
+
 

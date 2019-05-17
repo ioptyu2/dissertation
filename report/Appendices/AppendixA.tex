@@ -1,6 +1,509 @@
 % Appendix A
 
-\chapter{if appropriate} % Main appendix title
+\chapter{Code} % Main appendix title
 
 \label{AppendixA} % For referencing this appendix elsewhere, use \ref{AppendixA}
 
+\section{preprocessing.py}
+\begin{lstlisting}
+# -*- coding: utf-8 -*-
+
+import numpy as np
+import pandas as pd
+
+np.set_printoptions(suppress=True)
+
+
+def import_data():
+
+    varol_users = np.loadtxt("Z:\ioptyu2\Desktop\gitDissertation\local\Data\\varol_2017.dat")
+
+
+    col_name = ["UserID","CreatedAt","CollectedAt","Followings","Followers","Tweets","NameLength","BioLength"]
+    bot_users = pd.read_csv("Z:/ioptyu2/Desktop/gitDissertation/local/Data/social_honeypot_icwsm_2011/content_polluters.txt",
+                                     sep="\t",
+                                     names = col_name)
+
+
+    legit_users = pd.read_csv("Z:/ioptyu2/Desktop/gitDissertation/local/Data/social_honeypot_icwsm_2011/legitimate_users.txt",
+                                      sep="\t",
+                                      names = col_name)
+    
+    return [varol_users,bot_users,legit_users,col_name]
+
+#col_name = ["UserID","TweetID","Tweet","CreatedAt"]
+#bot_tweets = pd.read_csv("Z:/ioptyu2/Desktop/gitDissertation/local/Data/social_honeypot_icwsm_2011/content_polluters_tweets.txt",
+#                                  sep="\t",
+#                                  names = col_name)
+
+\end{lstlisting}
+
+\section{random\_forest.py}
+\begin{lstlisting}
+# -*- coding: utf-8 -*-
+
+from sklearn import datasets
+from random import seed
+from random import randrange
+from math import sqrt
+import numpy as np
+import preprocessing
+
+
+iris = datasets.load_iris()
+
+X = iris.data
+Y = iris.target
+dataset = []
+#for i in range(len(X)):
+#    dataset.append(np.hstack((X[i],Y[i])))
+
+#cleaning up data(picking out useful rows)
+df = preprocessing.import_data()
+bots = df[1].values[:2000,3:].astype(int)
+legit = df[2].values[:2000,3:].astype(int)
+
+
+#adding label, bots=1 legit=0
+bots = np.hstack((bots,np.ones((bots.shape[0],1))))
+legit = np.hstack((legit,np.zeros((legit.shape[0],1))))
+
+dataset = np.vstack((bots,legit))
+
+test_bots = df[1].values[2000:3000,3:].astype(int)
+test_legit = df[2].values[2000:3000,3:].astype(int)
+
+test_data = np.vstack((test_bots, test_legit))
+test_label = np.vstack((np.ones((test_bots.shape[0],1)), np.zeros((test_legit.shape[0],1))))
+
+#References:
+#https://www.python-course.eu/Random_Forests.php
+#https://machinelearningmastery.com/implement-random-forest-scratch-python/
+
+#split a dataset into k folds
+def cv(dataset,folds):
+    dataset_split = list()
+    dataset_copy = list(dataset)
+    fold_size = len(dataset)/folds
+    for i in range(folds):
+        fold = list()
+        while len(fold) < fold_size:
+            index = randrange(len(dataset_copy))
+            fold.append(dataset_copy.pop(index))
+        dataset_split.append(fold)
+    return dataset_split
+
+#calculate accuracy
+def accuracy_calc(actual, predicted):
+    acc = 0.0
+    for i in range(len(actual)):
+        if actual[i] == predicted[i]:
+            acc += 1.0
+    return acc / len(actual) * 100.0
+
+#evaluate the algorithm with cv
+def evaluate(dataset, algorithm, folds, *args):
+    folds = cv(dataset,folds)
+    scores = list()
+    for fold in folds:
+        train_set = list(folds)
+        train_set = sum(train_set, [])
+        test_set = list()
+        for row in fold:
+            row_copy = list(row)
+            test_set.append(row_copy)
+            row_copy[-1] = None
+        predicted = algorithm(train_set, test_set, *args)
+        actual = [row[-1] for row in fold]
+        accuracy = accuracy_calc(actual, predicted)
+        scores.append(accuracy)
+    return scores
+
+
+#split the data into two based on a threshold(value)
+def test_split(index, value, dataset):
+    left, right = list(), list()
+    for row in dataset:
+        if row[index] < value:
+            left.append(row)
+        else:
+            right.append(row)
+    return left,right
+
+#calculate the gini index
+def get_gini(groups, classes):
+    instances = float(sum([len(group) for group in groups]))
+    gini= 0.0
+    for group in groups:
+        size = float(len(group))
+        if size == 0:
+            continue
+        score = 0.0
+        for class_val in classes:
+            p = [row[-1] for row in group].count(class_val) / size
+            score += p*p
+        gini += (1.0 - score) * (size / instances)
+    return gini
+
+#pick the best split 
+def best_split(dataset, n_features):
+    class_values = list(set(row[-1] for row in dataset))
+    b_index, b_value, b_score, b_groups = 999,999,999,None
+    features = list()
+    while len(features) < n_features:
+        index = randrange(len(dataset[0])-1)
+        if index not in features:
+            features.append(index)
+    for index in features:
+        for row in dataset:
+            groups = test_split(index, row[index], dataset)
+            gini = get_gini(groups, class_values)
+            if gini < b_score:
+                b_index, b_value, b_score, b_groups = index, row[index], gini, groups
+    return {'index':b_index, 'value':b_value, 'groups':b_groups}
+
+#create a terminal node value
+def terminal(group):
+    outcomes = [row[-1] for row in group]
+    return max(set(outcomes), key=outcomes.count)
+
+#create child splits for a node or make a terminal
+def split(node, max_depth, min_size, n_features, depth):
+    left, right = node['groups']
+    del(node['groups'])
+    #check for no splits
+    if not left or not right:
+        node['left'] = node['right'] = terminal(left + right)
+        return
+    #check if max depth
+    if depth >= max_depth:
+        node['left'], node['right'] = terminal(left), terminal(right)
+        return
+    #go down left child
+    if len(left) <= min_size:
+        node['left'] = terminal(left)
+    else:
+        node['left'] = best_split(left, n_features)
+        split(node['left'], max_depth, min_size, n_features, depth + 1)
+    #go down right child
+    if len(right) <= min_size:
+        node['right'] = terminal(right)
+    else:
+        node['right'] = best_split(right, n_features)
+        split(node['right'], max_depth, min_size, n_features, depth + 1)
+        
+
+#build a tree
+def build_tree(train, max_depth, min_size, n_features):
+    root = best_split(train, n_features)
+    split(root, max_depth, min_size, n_features, 1)
+    return root
+
+
+#make a prediction using the tree and nodes
+def predict(node, row):
+    if row[node['index']] < node['value']:
+        if isinstance(node['left'], dict):
+            return predict(node['left'], row)
+        else:
+            return node['left']
+    else:
+        if isinstance(node['right'], dict):
+            return predict(node['right'], row)
+        else:
+            return node['right']
+
+
+#create a subsample for the data (the bagging/bootstrapping process)
+def subsample(dataset, ratio):
+    sample = list()
+    n_sample = round(len(dataset) * ratio)
+    while len(sample) < n_sample:
+        index = randrange(len(dataset))
+        sample.append(dataset[index])
+    return sample
+
+#make a prediction with a list of bagged trees
+def bagging_predict(trees, row):
+    predictions = [predict(tree, row) for tree in trees]
+    return max(set(predictions), key=predictions.count)
+
+#random forest algorithm
+def random_forest(train, test, max_depth, min_size, sample_size, n_trees, n_features):
+    trees = list()
+    for i in range(n_trees):
+        #print(i)
+        sample = subsample(train, sample_size)
+        tree = build_tree(sample, max_depth, min_size, n_features)
+        trees.append(tree)
+    predictions = [bagging_predict(trees, row) for row in test]
+    testing_predictions = [bagging_predict(trees,row) for row in test_data]
+    print('Backup testing:', accuracy_calc(test_label, testing_predictions))
+    return predictions
+
+#seed
+seed(1314)
+
+dataset = np.random.permutation(dataset)
+
+
+#print results and stuff
+n_folds = 2
+max_depth  = 10
+min_size = 1
+sample_size = 1
+n_features = int(sqrt(len(dataset[0])-1))
+for n_trees in [2,5,10]:
+    scores = evaluate(dataset, random_forest, n_folds, max_depth, min_size, sample_size, n_trees, n_features)
+    print('Trees: %d' % n_trees)
+    print('Scores: %s' % scores)
+    print('Mean accuracy: %.3f%%' %(sum(scores)/float(len(scores))))
+
+
+
+\end{lstlisting}
+
+\section{sklearnRF.py}
+\begin{lstlisting}
+# -*- coding: utf-8 -*-
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import export_graphviz
+import pydot
+import numpy as np
+import preprocessing
+from math import sqrt
+
+
+#1 = bots, 0 = legit
+#training data
+df = preprocessing.import_data()
+train_bots = df[1].values[:12000,3:].astype(int)
+train_legit = df[2].values[:12000,3:].astype(int)
+
+feature_list = df[3][3:]
+
+X_train = np.vstack((train_bots,train_legit))
+
+#testing data
+test_bots = df[1].values[15000:16000,3:].astype(int)
+test_legit = df[2].values[15000:16000,3:].astype(int)
+
+X_test = np.vstack((test_bots,test_legit))
+
+#training labels
+train_bots_label = np.ones((train_bots.shape[0],1))
+train_legit_label = np.zeros((train_legit.shape[0],1))
+
+Y_train = np.vstack((train_bots_label,train_legit_label))
+Y_train = Y_train.ravel(order='C')
+
+#testing labels
+test_bots_label = np.ones((test_bots.shape[0],1))
+test_legit_label = np.zeros((test_legit.shape[0],1))
+
+Y_test = np.vstack((test_bots_label,test_legit_label))
+Y_test = Y_test.ravel(order='C')
+a = list()
+#random forest algorithm using sklearn
+def random_forest(n_trees, max_depth, n_features):
+    rf = RandomForestClassifier(n_estimators = n_trees, max_depth = max_depth, max_features = n_features, bootstrap = True)
+    rf.fit(X_train, Y_train)
+    predictions = rf.predict(X_test)
+    save_tree(rf)
+    return predictions
+
+#calculate accuracy for predictions
+def accuracy(predictions):
+#    for i in range(len(predictions)):
+#        if predictions[i] < 0.5:
+#            predictions[i] = 0.0
+#        else:
+#            predictions[i] = 1.0
+    accuracy = 0.0
+    for i in range(len(predictions)):
+        if predictions[i] == Y_test[i]:
+            accuracy += 1.0
+    accuracy = accuracy / len(predictions) * 100
+    print("Accuracy: ",accuracy, "%")
+    return
+#reference for visualisation
+#https://towardsdatascience.com/random-forest-in-python-24d0893d51c0
+
+#Visualise a tree
+def save_tree(rf):
+    tree = rf.estimators_[1]
+    export_graphviz(tree, out_file = 'tree.dot', feature_names = feature_list, rounded = True, precision = 1)
+    (graph, ) = pydot.graph_from_dot_file('tree.dot')
+    graph.write_png('tree.png')
+    return
+
+
+max_depth = 10
+n_features = int(sqrt(len(X_test[0])))
+
+for n_trees in [2,5,10,50,100,500,1000]:
+    print("Trees: ",n_trees)
+    predictions = random_forest(n_trees, max_depth, n_features)
+    accuracy(predictions)
+
+\end{lstlisting}
+
+\section{ANN.py}
+\begin{lstlisting}
+# -*- coding: utf-8 -*-
+
+import numpy as np
+import preprocessing
+from sklearn.preprocessing import StandardScaler
+from keras import layers, models
+from keras.utils import to_categorical
+import matplotlib.pyplot as plt
+from sklearn import datasets
+
+
+
+#iris = datasets.load_iris()
+#
+#X = iris.data
+#Y = iris.target
+#dataset = []
+#for i in range(len(X)):
+#    dataset.append(np.hstack((X[i],Y[i])))
+#dataset = np.random.permutation(dataset)
+#x_train = dataset[:100,:4]
+#y_train = dataset[:100,-1]
+#
+#x_test = dataset[100:120,:4]
+#y_test = dataset[100:120,:4]
+#
+#x_val = dataset[120:,:4]
+#y_val = dataset[120:,-1]
+#
+#y_true = dataset[:,-1]
+
+
+#############PREPROCESSING##############
+df = preprocessing.import_data()
+train_bots = df[1].values[:10000,3:].astype(int)
+train_legit = df[2].values[:10000,3:].astype(int)
+
+x_train = np.vstack((train_bots,train_legit))
+
+
+test_bots = df[1].values[12000:16000,3:].astype(int)
+test_legit = df[2].values[12000:16000,3:].astype(int)
+
+x_test = np.vstack((test_bots,test_legit))
+
+
+train_bots_label = np.ones((train_bots.shape[0],1))
+train_legit_label = np.zeros((train_legit.shape[0],1))
+
+y_train = np.vstack((train_bots_label,train_legit_label))
+
+
+test_bots_label = np.ones((test_bots.shape[0],1))
+test_legit_label = np.zeros((test_legit.shape[0],1))
+
+y_test = np.vstack((test_bots_label,test_legit_label))
+y_true = y_test
+
+val_bots = df[1].values[10000:12000,3:].astype(int)
+val_legit = df[2].values[10000:12000,3:].astype(int)
+
+x_val = np.vstack((val_bots, val_legit))
+
+val_bots_label = np.ones((val_bots.shape[0],1))
+val_legit_label = np.zeros((val_legit.shape[0],1))
+
+y_val = np.vstack((val_bots_label,val_legit_label))
+
+
+
+y_train = to_categorical(y_train)
+y_test = to_categorical(y_test)
+y_val = to_categorical(y_val)
+
+sc = StandardScaler()
+x_train = sc.fit_transform(x_train)
+x_test = sc.fit_transform(x_test)
+x_val = sc.fit_transform(x_val)
+
+######create model######
+model = models.Sequential()
+model.add(layers.Dense(64, activation = "relu"))
+model.add(layers.Dense(32, activation = 'relu'))
+model.add(layers.Dense(2, activation = 'sigmoid'))
+
+
+model.compile(optimizer = 'adam',
+              loss = 'binary_crossentropy',
+              metrics = ['accuracy'])
+
+epochs = 100
+batch_size = 16
+
+history = model.fit(x_train,
+                    y_train,
+                    epochs = epochs,
+                    batch_size = batch_size,
+                    validation_data = (x_val, y_val))
+
+
+###predictions###
+y_pred = model.predict(x_test)
+
+for i in range(len(y_pred)):
+    if(y_pred[i][0] < y_pred[i][1]):
+        y_pred[i] = 1
+    else:
+        y_pred[i] = 0
+y_pred = y_pred[:,0]
+
+acc = 0.0
+for i in range(len(y_pred)):
+    if y_pred[i] == y_true[i]:
+        acc += 1.0
+acc = acc / len(y_pred) * 100
+print('Epochs run: ', epochs)
+print('Batch size: ', batch_size)
+print('Test data size: ', len(y_pred))
+print('Accuracy on test data: ', acc, '%')
+
+def comparison_plot(x, 
+                    y_A, style_A, label_A, 
+                    y_B, style_B, label_B, 
+                    title, x_label, y_label):
+    
+    plt.clf()
+    plt.plot(x, y_A, style_A, label = label_A)
+    plt.plot(x, y_B, style_B, label = label_B)
+    plt.title(title)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.legend()
+    plt.show()
+
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+comparison_plot(range(1, len(loss) + 1),
+                loss, 'bo', 'Training',
+                val_loss, 'b', 'Validation',
+                'Training and validation loss',
+                'Epochs',
+                'Loss')
+
+acc = history.history['acc']
+val_acc = history.history['val_acc']
+comparison_plot(range(1, len(loss) + 1),
+                acc, 'bo', 'Training',
+                val_acc, 'b', 'Validation',
+                'Training and validation accuracy',
+                'Epochs',
+                'Accuracy')
+
+print("Highest validation accuracy:", val_acc[np.argmax(val_acc)], "Epochs:", np.argmax(val_acc))
+print("Lowest validation loss:", val_loss[np.argmin(val_loss)], "Epochs:", np.argmin(val_loss))
+
+
+\end{lstlisting}
